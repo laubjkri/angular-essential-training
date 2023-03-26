@@ -1,0 +1,9 @@
+h1 {color: #ffffff}
+/* 
+Even though the css below refers to the class, Angular will make sure it is only scoped to stuff in the component.
+It does so by creating id's for each tag and then uses those in the DOM instead of classes.
+*/
+.description {
+  font-style: italic;
+  color: green;  
+}
