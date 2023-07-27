@@ -1,12 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnInit, Inject } from '@angular/core';
+import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { MediaItemService } from './media-item.service';
+import { lookupListToken } from "./providers";
 
 @Component({
   selector: 'mw-media-item-form',
   templateUrl: './media-item-form.component.html',
   styleUrls: ['./media-item-form.component.css']
 })
-export class MediaItemFormComponent /*implements OnInit*/ {
+export class MediaItemFormComponent implements OnInit {
   public form: FormGroup = new FormGroup({
     medium: new FormControl("Movies"),
     name: new FormControl("", Validators.compose([
@@ -17,22 +19,31 @@ export class MediaItemFormComponent /*implements OnInit*/ {
     year: new FormControl("", (control) => this.yearValidator(control as FormControl))
   });
 
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private mediaItemService: MediaItemService, // angular will pass the media item service here when instantiated
+    @Inject(lookupListToken) public lookupLists: any // value based injection
+  ) { }
+
+
+  // OnInit will do constructor stuff at the right "angular time"
   ngOnInit(): void {
-    this.form = new FormGroup({
-      medium: new FormControl("Movies"),
-      name: new FormControl("", Validators.compose([
+    this.form = this.formBuilder.group({ // new FormGroup({
+      medium: this.formBuilder.control("Movies"), // new FormControl("Movies")
+      name: this.formBuilder.control("", Validators.compose([
         Validators.required,
         Validators.pattern("[\\w\\-\\s\\/]+")
       ])),
-      category: new FormControl(""),
-      year: new FormControl("", (control) => this.yearValidator(control as FormControl))
+      category: this.formBuilder.control(""),
+      year: this.formBuilder.control("", (control) => this.yearValidator(control as FormControl))
     });
   }
   
-  // OnInit will do certain stuff at the right "angular time"
 
   onSubmit(mediaItem: any) {
     console.log(mediaItem);
+    this.mediaItemService.add(mediaItem);
   }
 
   yearValidator(control: FormControl) {
