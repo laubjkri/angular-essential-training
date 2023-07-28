@@ -1,9 +1,32 @@
-h1 {color: #ffffff}
 /* 
 Even though the css below refers to the class, Angular will make sure it is only scoped to stuff in the component.
 It does so by creating id's for each tag and then uses those in the DOM instead of classes.
 */
-.description {
+
+:host {
+  display: flex;
+  min-height: 100%;
+}
+nav {
+  width: 68px;
+  background-color: #53ace4;
+}
+nav .icon {
+  width: 48px;
+  height: 48px;
+  margin: 10px;
+}
+section {
+  width: 100%;
+  background-color: #32435b;
+}
+section > header {
+  color: #ffffff;
+  padding: 10px;
+}
+section > header > h1 {
+  font-size: 2em;
+}
+section > header .description {
   font-style: italic;
-  color: green;  
 }

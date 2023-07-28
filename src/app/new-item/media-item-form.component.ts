@@ -1,7 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { MediaItemService } from './media-item.service';
-import { lookupListToken } from "./providers";
+import { MediaItemService } from '../media-item.service';
+import { lookupListToken } from "../providers";
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'mw-media-item-form',
@@ -23,7 +24,8 @@ export class MediaItemFormComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private mediaItemService: MediaItemService, // angular will pass the media item service here when instantiated
-    @Inject(lookupListToken) public lookupLists: any // value based injection
+    @Inject(lookupListToken) public lookupLists: any, // value based injection
+    private router: Router
   ) { }
 
 
@@ -43,7 +45,10 @@ export class MediaItemFormComponent implements OnInit {
 
   onSubmit(mediaItem: any) {
     console.log(mediaItem);
-    this.mediaItemService.add(mediaItem);
+    this.mediaItemService.add(mediaItem)
+      .subscribe(() => {
+        this.router.navigate(["/", mediaItem.medium]);
+      });
   }
 
   yearValidator(control: FormControl) {
